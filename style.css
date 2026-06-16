@@ -1,5 +1,28 @@
-/* FindIt — style.css | MCA Trimester 1 Full Stack Dev */
+/* ═══════════════════════════════════════════════════════════════
+   FindIt — style.css
+   Lab 2 | MCA Trimester 1 Full Stack Development
+   Christ University, Bangalore
 
+   Technologies demonstrated in this file:
+   ─────────────────────────────────────────
+   • CSS Flexbox  — navigation bar, hero CTA row, stat chips,
+                    hero card internals, step flow, icon centring,
+                    FAQ summary row, modal header + form, footer
+   • CSS Grid     — hero 2-col, about/features 3-col, contact 2-col,
+                    modal date-time row (2-col)
+   • CSS :target  — modal open/close with zero JavaScript
+   • CSS :checked — hamburger menu toggle with zero JavaScript
+   • CSS Variables (--blue, --gray, etc.) — single source of truth
+                    for the entire colour palette
+   • HTML5 meter  — styled via ::-webkit-meter-* pseudo-elements
+   • HTML5 progress — styled via ::-webkit-progress-* pseudo-elements
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ── BASE / CSS CUSTOM PROPERTIES ──────────────────────────────
+   CSS Variables defined on :root so every rule below can
+   reference --blue instead of repeating #2563EB everywhere.
+   A single colour change here propagates through the whole page. */
 :root {
   --blue:   #2563EB;
   --blue-d: #1D4ED8;
@@ -11,16 +34,19 @@
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html  { scroll-behavior: smooth; }
-body  { font-family: system-ui, -apple-system, sans-serif; color: var(--ink); line-height: 1.6; }
-a     { text-decoration: none; color: inherit; }
-ul    { list-style: none; }
+html   { scroll-behavior: smooth; }
+body   { font-family: system-ui, -apple-system, sans-serif; color: var(--ink); line-height: 1.6; }
+a      { text-decoration: none; color: inherit; }
+ul     { list-style: none; }
 button { font-family: inherit; }
 
+/* .wrap centres page content and caps max width on large screens */
 .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
 
 
-/* ---- BUTTONS ---- */
+/* ── BUTTONS ────────────────────────────────────────────────────
+   .btn  = filled primary button  (blue background)
+   .btn-o = outline ghost button  (transparent, border only)   */
 .btn {
   display: inline-block;
   padding: 11px 22px;
@@ -48,185 +74,222 @@ button { font-family: inherit; }
 .btn-o:hover { border-color: var(--blue); color: var(--blue); }
 
 
-/* ---- NAV ---- */
+/* ── NAVIGATION BAR ─────────────────────────────────────────────
+   FLEXBOX usage:
+     .nav-row  — display:flex, justify-content:space-between
+                 pushes logo to the far left and nav links to the
+                 far right. align-items:center vertically centres
+                 all children on the 60 px bar.
+     .logo     — display:flex + gap:7px places the SVG magnifier
+                 icon and "FindIt" text on the same baseline.
+     .nav-links — display:flex + gap:28px lays all anchor links
+                 horizontally in a row.
+
+   CSS :checked trick (hamburger):
+     .nav-check is a hidden checkbox. The <label for="nt"> burger
+     button visually replaces it. When checked, adjacent sibling
+     selectors (.nav-check:checked + .burger, ~ .nav-links) control
+     the menu visibility and animate the three bars to an X.     */
 .nav { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); z-index: 100; }
 
-.nav-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-}
+/* FLEXBOX: logo left ↔ links right, vertically centred */
+.nav-row { display: flex; align-items: center; justify-content: space-between; height: 60px; }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
+/* FLEXBOX: SVG icon + text side-by-side */
+.logo { display: flex; align-items: center; gap: 7px; font-size: 1.1rem; font-weight: 700; }
 
+/* Hidden checkbox — state holder for CSS-only mobile menu */
 .nav-check { display: none; }
 
+/* Hamburger button (three bars) — visible only on mobile */
 .burger {
-  display: none;
-  flex-direction: column;
+  display: none;                   /* shown via media query at ≤600px */
+  flex-direction: column;          /* FLEXBOX COLUMN: stacks the three spans */
   justify-content: space-between;
-  width: 22px;
-  height: 16px;
+  width: 22px; height: 16px;
   cursor: pointer;
   margin-left: auto;
 }
+.burger span { display: block; height: 2px; background: #374151; border-radius: 2px; transition: .25s; }
 
-.burger span {
-  display: block;
-  height: 2px;
-  background: #374151;
-  border-radius: 2px;
-  transition: .25s;
-}
-
+/* CSS :checked — animate bars to X when hamburger is open */
 .nav-check:checked + .burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-check:checked + .burger span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .nav-check:checked + .burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* FLEXBOX ROW: horizontal nav links on desktop */
 .nav-links { display: flex; gap: 28px; }
 .nav-links a { font-size: .875rem; font-weight: 500; color: var(--gray); transition: .2s; }
 .nav-links a:hover { color: var(--ink); }
 
 
-/* ---- HERO ---- */
+/* ── HERO SECTION ───────────────────────────────────────────────
+   CSS GRID usage:
+     .hero-inner — grid-template-columns: 1fr 1fr creates two equal
+                   columns: left = headline text, right = product
+                   preview card. gap:56px separates them.
+                   Collapses to 1 column at ≤860px (tablet).
+
+   FLEXBOX usage (inside the left column and the card):
+     .hero-btns  — display:flex + gap:10px places the two CTA
+                   buttons side-by-side; flex-wrap:wrap lets them
+                   stack if the column is too narrow.
+     .hero-stats — display:flex + gap:28px lays three stat chips
+                   in a row above a border-top divider line.
+     .hcard-hd   — display:flex puts the green live-dot, label,
+                   and confidence badge on the same line; the badge
+                   gets margin-left:auto to push it to the right.
+     .hcard-item — display:flex + gap:12px aligns the emoji icon
+                   and item-name/sub-text side-by-side.
+     .hbar       — display:flex + gap:10px aligns the label, HTML5
+                   meter/progress bar, and numeric value in a row.
+
+   HTML5 <meter>:
+     Represents a scalar measurement within a known range (0–1).
+     Attributes: value (current), min, max, low, high, optimum.
+     Styled via ::-webkit-meter-bar and ::-webkit-meter-optimum-value
+     pseudo-elements to match the site colour scheme.
+
+   HTML5 <progress>:
+     Represents task completion (items recovered / total target).
+     Styled via ::-webkit-progress-bar (track) and
+     ::-webkit-progress-value (fill) pseudo-elements.                */
 .hero       { padding: 72px 0 80px; background: linear-gradient(155deg, #EFF6FF 0%, #fff 55%); }
+
+/* CSS GRID: 2-column hero — text (left) | product card (right) */
 .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
 
 .tag  { font-size: .7rem; color: var(--gray); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px; }
 .hero-text h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.1; letter-spacing: -.5px; margin-bottom: 14px; }
-.hl   { color: var(--blue); }
+.hl   { color: var(--blue); }                /* highlight span inside h1 */
 .lead { color: var(--gray); font-size: .95rem; line-height: 1.7; margin-bottom: 28px; }
+
+/* FLEXBOX ROW: primary CTA + outline CTA buttons */
 .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
 
-.hero-stats  { display: flex; gap: 28px; padding-top: 22px; border-top: 1px solid var(--border); }
+/* FLEXBOX ROW: three quick-stat chips */
+.hero-stats   { display: flex; gap: 28px; padding-top: 22px; border-top: 1px solid var(--border); }
 .hstat strong { display: block; font-size: 1.45rem; font-weight: 800; }
 .hstat span   { font-size: .74rem; color: var(--gray); }
 
-/* Hero product card */
-.hero-card  { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 4px 24px rgba(37,99,235,.1), 0 1px 4px rgba(0,0,0,.05); }
-.hcard-hd   { display: flex; align-items: center; gap: 8px; font-size: .82rem; font-weight: 600; margin-bottom: 14px; }
-.hdot       { width: 8px; height: 8px; background: #22C55E; border-radius: 50%; flex-shrink: 0; }
-.hbadge     { margin-left: auto; background: #DCFCE7; color: #15803D; font-size: .7rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; }
+/* Hero product preview card */
+.hero-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 4px 24px rgba(37,99,235,.1), 0 1px 4px rgba(0,0,0,.05); }
+
+/* FLEXBOX ROW: live-dot + "Match Found" label + badge */
+.hcard-hd  { display: flex; align-items: center; gap: 8px; font-size: .82rem; font-weight: 600; margin-bottom: 14px; }
+.hdot      { width: 8px; height: 8px; background: #22C55E; border-radius: 50%; flex-shrink: 0; }
+.hbadge    { margin-left: auto; background: #DCFCE7; color: #15803D; font-size: .7rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; }
+
+/* FLEXBOX ROW: emoji icon + item name/location */
 .hcard-item { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 14px; margin-bottom: 14px; }
 .hcard-ico  { font-size: 1.3rem; width: 42px; height: 42px; background: #EFF6FF; border-radius: var(--r); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .hcard-item p     { font-size: .875rem; }
 .hcard-item small { display: block; font-size: .76rem; color: var(--gray); margin-top: 2px; }
-.hbar       { display: flex; align-items: center; gap: 10px; font-size: .78rem; margin-bottom: 9px; }
-.hbar span  { color: var(--gray); min-width: 108px; }
-.hbar strong{ color: var(--ink); font-weight: 600; }
-.hcard-cta  { display: block; text-align: center; margin-top: 14px; }
 
-/* HTML5 meter + progress */
-meter, progress { width: 90px; height: 6px; border: none; border-radius: 4px; overflow: hidden; appearance: none; -webkit-appearance: none; }
+/* FLEXBOX ROW: label | meter/progress bar | value */
+.hbar        { display: flex; align-items: center; gap: 10px; font-size: .78rem; margin-bottom: 9px; }
+.hbar span   { color: var(--gray); min-width: 108px; }
+.hbar strong { color: var(--ink); font-weight: 600; }
+.hcard-cta   { display: block; text-align: center; margin-top: 14px; }
+
+/* HTML5 <meter> and <progress> — custom track + fill colours
+   appearance:none removes the browser's default native styling
+   so we can apply our own colours via pseudo-elements.          */
+meter, progress {
+  width: 90px; height: 6px; border: none; border-radius: 4px;
+  overflow: hidden; appearance: none; -webkit-appearance: none;
+}
+/* Track (unfilled background) */
 meter::-webkit-meter-bar,
 progress::-webkit-progress-bar     { background: var(--border); border: none; border-radius: 4px; }
+/* Fill (value portion) */
 meter::-webkit-meter-optimum-value,
 progress::-webkit-progress-value   { background: var(--blue); border-radius: 4px; }
+/* Firefox equivalents */
 meter::-moz-meter-bar,
 progress::-moz-progress-bar        { background: var(--blue); border-radius: 4px; }
 
 
-/* ---- SECTIONS ---- */
+/* ── SECTIONS ───────────────────────────────────────────────── */
 .sec     { padding: 80px 0; }
 .sec-alt { background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
 h2   { font-size: 1.75rem; font-weight: 700; letter-spacing: -.3px; margin-bottom: 8px; }
 .sub { color: var(--gray); font-size: .95rem; margin-bottom: 36px; max-width: 520px; }
 
 
-/* ---- CARDS (About + Features shared grid) ---- */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
+/* ── ABOUT + FEATURES CARDS ─────────────────────────────────────
+   CSS GRID usage:
+     .cards — grid-template-columns: repeat(3, 1fr) creates three
+              equal columns. Used by both the About section (plain
+              .card) and the Features section (.feat). DRY principle:
+              one grid class, two different card styles.
+   FLEXBOX usage:
+     .icon — display:flex + align-items:center + justify-content:
+              center perfectly centres the SVG inside the blue
+              36×36 square regardless of SVG size.               */
 
-.card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 24px;
-}
+/* CSS GRID: 3 equal columns for About cards and Feature cards */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
+.card { background: #fff; border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
 .card h3 { font-size: .92rem; font-weight: 700; margin-bottom: 6px; }
 .card p  { font-size: .865rem; color: var(--gray); line-height: 1.65; }
 
-.feat {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 24px;
-  transition: box-shadow .2s, border-color .2s;
-}
+.feat { background: #fff; border: 1px solid var(--border); border-radius: var(--r); padding: 24px; transition: box-shadow .2s, border-color .2s; }
 .feat:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); border-color: #DBEAFE; }
 
-.icon {
-  width: 36px;
-  height: 36px;
-  background: #EFF6FF;
-  border-radius: var(--r);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--blue);
-  margin-bottom: 14px;
-}
-
+/* FLEXBOX: centres SVG icon inside the blue rounded square */
+.icon { width: 36px; height: 36px; background: #EFF6FF; border-radius: var(--r); display: flex; align-items: center; justify-content: center; color: var(--blue); margin-bottom: 14px; }
 .feat h3 { font-size: .9rem; font-weight: 700; margin-bottom: 6px; }
 .feat p  { font-size: .85rem; color: var(--gray); line-height: 1.6; }
 
 
-/* ---- HOW IT WORKS ---- */
+/* ── HOW IT WORKS ───────────────────────────────────────────────
+   FLEXBOX usage:
+     .steps      — display:flex lays 4 step boxes and 3 arrow
+                   separators in a single horizontal row.
+                   align-items:flex-start anchors everything to the
+                   top so taller boxes don't stretch the arrows.
+     .step       — flex:1 makes all four boxes grow to equal width
+                   automatically, no matter how many there are.
+     .step-arrow — display:flex + align-items:flex-start centres
+                   the SVG arrow. flex-shrink:0 stops arrows from
+                   being crushed when viewport narrows.
+                   On mobile the arrows rotate 90° via transform
+                   and the row becomes a column (flex-direction:column). */
+
+/* FLEXBOX ROW: step boxes grow equally, arrows stay fixed width */
 .steps { display: flex; align-items: flex-start; }
 
-.step {
-  flex: 1;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 24px 18px;
-}
-
-.step > span {
-  display: block;
-  font-size: 1.7rem;
-  font-weight: 900;
-  color: #DBEAFE;
-  margin-bottom: 10px;
-  line-height: 1;
-}
-
+.step { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 24px 18px; }
+.step > span { display: block; font-size: 1.7rem; font-weight: 900; color: #DBEAFE; margin-bottom: 10px; line-height: 1; }
 .step h3 { font-size: .88rem; font-weight: 700; margin-bottom: 5px; }
 .step p  { font-size: .82rem; color: var(--gray); line-height: 1.6; }
 
-.step-arrow {
-  display: flex;
-  align-items: flex-start;
-  padding: 22px 8px 0;
-  color: var(--border);
-  flex-shrink: 0;
-}
+/* FLEXBOX: centres the arrow SVG; flex-shrink:0 prevents compression */
+.step-arrow { display: flex; align-items: flex-start; padding: 22px 8px 0; color: var(--border); flex-shrink: 0; }
 
 
-/* ---- FAQ (HTML5 details/summary) ---- */
-.faqs {
-  max-width: 700px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-  background: #fff;
-}
+/* ── FAQ — HTML5 <details> / <summary> ─────────────────────────
+   HTML5 API usage:
+     <details>  — native browser disclosure widget. The browser
+                  manages the open/closed state via the [open]
+                  attribute. No JavaScript event listeners needed.
+     <summary>  — the always-visible clickable heading. Clicking
+                  it toggles the parent <details> open attribute.
+   CSS targeting:
+     details[open] — attribute selector applies styles only when
+                     the accordion is expanded.
+   FLEXBOX usage:
+     summary — display:flex + justify-content:space-between pushes
+               the +/− indicator to the far right without needing
+               absolute positioning or float.                     */
+.faqs { max-width: 700px; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; background: #fff; }
 
 details { border-bottom: 1px solid var(--border); }
 details:last-child { border-bottom: none; }
 
+/* FLEXBOX ROW: question text left, +/− right */
 summary {
   display: flex;
   justify-content: space-between;
@@ -236,74 +299,40 @@ summary {
   font-size: .9rem;
   font-weight: 600;
   cursor: pointer;
-  list-style: none;
+  list-style: none;          /* removes default browser triangle */
   transition: background .2s;
   user-select: none;
 }
+summary::-webkit-details-marker { display: none; }   /* Chrome/Safari triangle */
+summary::marker  { display: none; content: ''; }     /* Firefox triangle */
+summary::after   { content: '+'; font-size: 1.1rem; font-weight: 300; color: var(--gray); flex-shrink: 0; }
 
-summary::-webkit-details-marker { display: none; }
-summary::marker { display: none; content: ''; }
-summary::after  { content: '+'; font-size: 1.1rem; font-weight: 300; color: var(--gray); flex-shrink: 0; }
-
+/* CSS details[open] — attribute selector, no JS state management */
 details[open] summary       { background: var(--bg); color: var(--blue); }
 details[open] summary::after { content: '−'; color: var(--blue); }
 
-details p {
-  padding: 2px 20px 16px;
-  font-size: .875rem;
-  color: var(--gray);
-  line-height: 1.75;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-}
+details p { padding: 2px 20px 16px; font-size: .875rem; color: var(--gray); line-height: 1.75; background: var(--bg); border-top: 1px solid var(--border); }
 
 
-/* ---- CONTACT ---- */
-.contact-row {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 48px;
-  align-items: start;
-}
+/* ── CONTACT SECTION ────────────────────────────────────────────
+   CSS GRID usage:
+     .contact-row — grid-template-columns: 1fr 1.5fr creates an
+                    asymmetric 2-column layout. The form (right)
+                    gets 60% of the space, info block (left) gets
+                    40%. align-items:start stops the info column
+                    from stretching to match the taller form.     */
 
-.contact-info p {
-  font-size: .9rem;
-  color: var(--gray);
-  margin-bottom: 12px;
-  line-height: 1.65;
-}
+/* CSS GRID: 2-column contact layout — info (1fr) | form (1.5fr) */
+.contact-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 48px; align-items: start; }
 
+.contact-info p   { font-size: .9rem; color: var(--gray); margin-bottom: 12px; line-height: 1.65; }
 .contact-info p b { color: var(--ink); font-weight: 600; margin-right: 6px; }
 
-form {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 24px;
-}
-
+form { background: #fff; border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
 .field { margin-bottom: 14px; }
-
-.field label {
-  display: block;
-  font-size: .78rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 5px;
-}
-
+.field label { display: block; font-size: .78rem; font-weight: 600; color: #374151; margin-bottom: 5px; }
 .field input,
-.field textarea {
-  width: 100%;
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  font-size: .9rem;
-  font-family: inherit;
-  outline: none;
-  transition: .2s;
-}
-
+.field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--r); font-size: .9rem; font-family: inherit; outline: none; transition: .2s; }
 .field input:focus,
 .field textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
 .field input::placeholder,
@@ -311,178 +340,165 @@ form {
 .field textarea { resize: vertical; }
 
 
-/* ---- MODALS (CSS :target — no JavaScript) ---- */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 16px;
-  overflow-y: auto;
-}
+/* ── MODALS — CSS :target, zero JavaScript ──────────────────────
+   CSS :target usage:
+     .modal is display:none by default. When the browser URL
+     fragment matches the element's id (e.g. #modal-lost), the
+     :target pseudo-class fires and sets display:flex, making the
+     modal visible. Clicking the backdrop <a href="#!"> changes
+     the hash to #! (no element has that id) which closes the
+     modal. This entire open/close cycle uses no JavaScript.
 
-.modal:target { display: flex; }
+   FLEXBOX usage:
+     .modal      — display:flex + align-items:flex-start centres
+                   the modal box on screen and lets it scroll if
+                   content overflows the viewport height.
+     .modal-hd   — display:flex + justify-content:space-between
+                   puts the title on the left and ✕ on the right.
+     .modal-form — display:flex + flex-direction:column + gap
+                   stacks all form fields vertically with even
+                   spacing — no margin-bottom on individual fields.
+     .mf         — display:flex + flex-direction:column stacks
+                   each label directly above its input.
 
-.modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  backdrop-filter: blur(3px);
-  cursor: pointer;
-}
+   CSS GRID usage:
+     .mrow — grid-template-columns: 1fr 1fr places the Date and
+             Time fields side-by-side inside the modal form.
+             Collapses to 1 column on mobile (≤600px).
 
-.modal-box {
-  position: relative;
-  z-index: 1;
-  background: #fff;
-  border-radius: var(--r);
-  width: 100%;
-  max-width: 480px;
-  margin: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,.18);
-  overflow: hidden;
-}
+   HTML5 APIs used inside modals:
+     <datalist>          — type-ahead autocomplete suggestions
+     <input type="date"> — native calendar date picker
+     <input type="time"> — native clock time picker
+     <input type="tel">  — numeric keyboard on mobile
+     <select>            — native dropdown (Found modal)
+     required            — built-in submit validation             */
 
-.modal-hd {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 20px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-}
+/* CSS :target — hidden by default, display:flex when URL fragment matches */
+.modal { display: none; position: fixed; inset: 0; z-index: 200; justify-content: center; align-items: flex-start; padding: 40px 16px; overflow-y: auto; }
+.modal:target { display: flex; }       /* ← the entire modal mechanic in one rule */
 
+/* Clicking this backdrop link sets hash to #! and closes the modal */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.45); backdrop-filter: blur(3px); cursor: pointer; }
+
+.modal-box { position: relative; z-index: 1; background: #fff; border-radius: var(--r); width: 100%; max-width: 480px; margin: auto; box-shadow: 0 20px 60px rgba(0,0,0,.18); overflow: hidden; }
+
+/* FLEXBOX ROW: modal title left, ✕ close link right */
+.modal-hd { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--border); background: var(--bg); }
 .modal-hd h3 { font-size: .95rem; font-weight: 700; }
-
-.modal-x {
-  font-size: .8rem;
-  color: var(--gray);
-  padding: 4px 7px;
-  border-radius: 4px;
-  transition: .2s;
-}
+.modal-x { font-size: .8rem; color: var(--gray); padding: 4px 7px; border-radius: 4px; transition: .2s; }
 .modal-x:hover { background: #F3F4F6; color: var(--ink); }
 
-.modal-form {
-  padding: 16px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+/* FLEXBOX COLUMN: stacks form fields vertically with gap */
+.modal-form { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 12px; }
 
+/* FLEXBOX COLUMN: label stacked above input */
 .mf { display: flex; flex-direction: column; gap: 4px; }
-
-.mf label {
-  font-size: .76rem;
-  font-weight: 600;
-  color: #374151;
-}
-
+.mf label { font-size: .76rem; font-weight: 600; color: #374151; }
 .mf input,
 .mf textarea,
-.mf select {
-  padding: 8px 11px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  font-size: .88rem;
-  font-family: inherit;
-  outline: none;
-  transition: .2s;
-}
-
+.mf select  { padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--r); font-size: .88rem; font-family: inherit; outline: none; transition: .2s; }
 .mf input:focus,
 .mf textarea:focus,
-.mf select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+.mf select:focus   { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
 .mf input::placeholder,
 .mf textarea::placeholder { color: #9CA3AF; }
 .mf textarea { resize: vertical; }
 
+/* HTML5 <select> — appearance:none removes native arrow so we can inject our own SVG */
 .mf select {
-  appearance: none;
-  -webkit-appearance: none;
+  appearance: none; -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpolyline points='0,0 5,6 10,0' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 11px center;
-  padding-right: 30px;
-  cursor: pointer;
+  background-repeat: no-repeat; background-position: right 11px center; padding-right: 30px; cursor: pointer;
 }
 
+/* CSS GRID: Date + Time inputs side-by-side inside modal form */
 .mrow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 
-/* ---- FOOTER ---- */
+/* ── FOOTER ─────────────────────────────────────────────────────
+   HTML5   : <footer> semantic element.
+   FLEXBOX : .footer-row — display:flex + justify-content:space-
+             between places brand info on the left and the nav
+             link list on the right. flex-wrap:wrap lets it reflow
+             to a column at narrow widths (tablet breakpoint).
+   FLEXBOX : .footer-row ul — display:flex + flex-direction:column
+             + gap stacks the footer navigation links vertically. */
 .footer { background: #0B1426; color: #fff; padding: 40px 0 0; }
 
-.footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid #1E2F48;
-}
-
+/* FLEXBOX ROW: brand block left, nav links right */
+.footer-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; padding-bottom: 32px; border-bottom: 1px solid #1E2F48; }
 .footer-logo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-
 .footer-row > div > p { font-size: .85rem; color: #4A6280; line-height: 1.7; }
 
+/* FLEXBOX COLUMN: vertical footer nav links */
 .footer-row ul { display: flex; flex-direction: column; gap: 9px; }
 .footer-row a  { font-size: .85rem; color: #4A6280; transition: .2s; }
 .footer-row a:hover { color: #fff; }
-
 .footer-copy { text-align: center; font-size: .75rem; color: #243447; padding: 16px 0; }
 
 
-/* ---- RESPONSIVE ---- */
+/* ── RESPONSIVE BREAKPOINTS ─────────────────────────────────────
+   ≤860px (tablet): hero collapses to 1 column, cards go 2-col,
+                    steps stack vertically, arrows rotate 90°.
+   ≤600px (mobile): hamburger nav revealed via display:flex on
+                    .burger; nav links become a full-width dropdown
+                    controlled by CSS :checked (no JavaScript).
+                    Hero h1 shrinks, CTA buttons stack.           */
+
+/* ── TABLET (≤860px) ── */
 @media (max-width: 860px) {
+  /* CSS GRID: hero drops from 2-col to 1-col */
   .hero-inner  { grid-template-columns: 1fr; gap: 36px; }
   .hero-card   { max-width: 440px; }
+  /* CSS GRID: cards drop from 3-col to 2-col */
   .cards       { grid-template-columns: 1fr 1fr; }
+  /* FLEXBOX: steps stack vertically instead of horizontally */
   .steps       { flex-direction: column; gap: 12px; }
+  /* CSS transform: rotate arrows 90° to point downward */
   .step-arrow  { transform: rotate(90deg); padding: 4px 0 4px 20px; }
+  /* CSS GRID: contact drops from 2-col to 1-col */
   .contact-row { grid-template-columns: 1fr; gap: 28px; }
+  /* FLEXBOX: footer row stacks brand + links vertically */
   .footer-row  { flex-direction: column; }
 }
 
+/* ── MOBILE (≤600px) ── */
 @media (max-width: 600px) {
-  .burger  { display: flex; }
+  /* FLEXBOX COLUMN: reveal hamburger button (hidden on desktop) */
+  .burger { display: flex; }
 
+  /* FLEXBOX COLUMN: nav links become a full-width dropdown panel */
   .nav-links {
-    display: none;
+    display: none;                 /* hidden until checkbox :checked */
     flex-direction: column;
     gap: 0;
     position: absolute;
-    top: 60px;
-    left: 0;
-    right: 0;
+    top: 60px; left: 0; right: 0;
     background: #fff;
     border-bottom: 1px solid var(--border);
     padding: 4px 0;
   }
 
+  /* CSS :checked — show nav when hamburger checkbox is checked */
   .nav-check:checked ~ .nav-links { display: flex; }
 
-  .nav-links li a {
-    display: block;
-    padding: 13px 24px;
-    font-size: .9rem;
-    color: #374151;
-    border-bottom: 1px solid var(--border);
-  }
-
+  .nav-links li a { display: block; padding: 13px 24px; font-size: .9rem; color: #374151; border-bottom: 1px solid var(--border); }
   .nav-links li:last-child a { border-bottom: none; }
   .nav-links li a:hover { background: var(--bg); color: var(--blue); }
 
   .hero-text h1 { font-size: 1.9rem; }
+  /* FLEXBOX: CTA buttons stack vertically on small screens */
   .hero-btns { flex-direction: column; align-items: flex-start; }
   .hero-btns .btn,
   .hero-btns .btn-o { width: 220px; text-align: center; }
 
+  /* CSS GRID: cards go single column on mobile */
   .cards { grid-template-columns: 1fr; }
+  /* CSS GRID: modal date+time stack vertically on mobile */
   .mrow  { grid-template-columns: 1fr; }
 
-  .modal { padding: 12px; align-items: flex-end; }
+  /* Modal slides up from bottom on mobile (sheet pattern) */
+  .modal     { padding: 12px; align-items: flex-end; }
   .modal-box { border-radius: var(--r) var(--r) 0 0; }
 }

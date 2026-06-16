@@ -2,27 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- HTML5 viewport meta — tells mobile browsers to match device width, enables responsive layout -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FindIt — Lost &amp; Found</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ═══════════════════════════════════════════════════════════════
+     NAVIGATION BAR
+     ───────────────────────────────────────────────────────────────
+     HTML5   : <nav> is a semantic landmark element that identifies
+               a block of navigation links for assistive technologies
+               and search engines.
+     Flexbox : .nav-row uses display:flex with justify-content:space-
+               between to push the logo to the left and nav links to
+               the right. align-items:center vertically centres them.
+     Flexbox : .logo uses display:flex + gap to place the SVG icon
+               and "FindIt" text side-by-side.
+     CSS Trick: A hidden <input type="checkbox"> acts as a state
+               toggle for the mobile hamburger menu — no JavaScript.
+               CSS :checked + sibling selectors open/close the menu
+               and animate the three bars into an X shape.
+     ═══════════════════════════════════════════════════════════════ -->
 <nav class="nav">
-  <div class="wrap nav-row">
-    <a href="#home" class="logo">
+  <div class="wrap nav-row"><!-- FLEXBOX ROW: logo left, links right -->
+
+    <a href="#home" class="logo"><!-- FLEXBOX: icon + text inline -->
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
         <circle cx="7.5" cy="7.5" r="5.5" stroke="#2563EB" stroke-width="2"/>
         <line x1="11.5" y1="11.5" x2="17" y2="17" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
       </svg>
       FindIt
     </a>
+
+    <!-- HTML5 checkbox — CSS-only menu toggle, no JavaScript required -->
     <input type="checkbox" id="nt" class="nav-check">
+    <!-- Label triggers the checkbox; burger spans animate to X when :checked -->
     <label for="nt" class="burger" aria-label="Menu">
       <span></span><span></span><span></span>
     </label>
-    <ul class="nav-links">
+
+    <ul class="nav-links"><!-- FLEXBOX ROW: nav links spaced evenly -->
       <li><a href="#home">Home</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#steps">How It Works</a></li>
@@ -32,18 +53,44 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<section id="home" class="hero">
-  <div class="wrap hero-inner">
 
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO SECTION
+     ───────────────────────────────────────────────────────────────
+     HTML5   : <section> semantic element groups thematically
+               related content with an implicit ARIA landmark role.
+     CSS Grid: .hero-inner is a 2-column grid (1fr 1fr) that places
+               the headline text on the left and the product preview
+               card on the right. Collapses to 1 column on tablet.
+     Flexbox : .hero-btns — CTA buttons side-by-side with gap.
+     Flexbox : .hero-stats — stat chips in a row separated by a
+               border-top divider line.
+     Flexbox : .hcard-hd  — live dot + label + badge in one row.
+     Flexbox : .hcard-item — emoji icon + item text aligned inline.
+     Flexbox : .hbar       — label + meter/progress + value in a row.
+     HTML5 API <meter>    — represents a scalar value within a known
+               range (e.g. 0–1 match confidence). Styled with
+               ::-webkit-meter-* pseudo-elements.
+     HTML5 API <progress> — represents task completion progress
+               (items recovered / total). Styled with
+               ::-webkit-progress-* pseudo-elements.
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="home" class="hero">
+  <div class="wrap hero-inner"><!-- CSS GRID: 2-column hero layout -->
+
+    <!-- Left column: headline, CTA, stats -->
     <div class="hero-text">
       <p class="tag">MCA Trimester 1 &middot; Full Stack Development &middot; Christ University</p>
       <h1>Find What's<br><span class="hl">Lost on Campus</span></h1>
       <p class="lead">One platform to report, match, and return lost items — no notice boards, no group chats, no dead ends.</p>
+
+      <!-- FLEXBOX ROW: primary + outline CTA buttons -->
       <div class="hero-btns">
         <a href="#modal-lost" class="btn">Report Lost Item</a>
         <a href="#modal-found" class="btn-o">Report Found Item</a>
       </div>
+
+      <!-- FLEXBOX ROW: three quick-stat chips with top border divider -->
       <div class="hero-stats">
         <div class="hstat"><strong>94%</strong><span>Match accuracy</span></div>
         <div class="hstat"><strong>248</strong><span>Items recovered</span></div>
@@ -51,13 +98,17 @@
       </div>
     </div>
 
-    <!-- Product preview card — HTML5 meter + progress inside -->
+    <!-- Right column: product preview card -->
     <div class="hero-card">
+
+      <!-- FLEXBOX ROW: status dot + label + confidence badge -->
       <div class="hcard-hd">
         <span class="hdot"></span>
         <span>Match Found</span>
         <span class="hbadge">94% confidence</span>
       </div>
+
+      <!-- FLEXBOX ROW: item icon + item details -->
       <div class="hcard-item">
         <div class="hcard-ico">&#128241;</div>
         <div>
@@ -65,27 +116,44 @@
           <small>Found near MCA Block &middot; 2 hrs ago</small>
         </div>
       </div>
+
+      <!-- HTML5 <meter>: scalar measurement — match confidence (0 to 1 range) -->
+      <!-- FLEXBOX ROW: label | meter bar | percentage value -->
       <div class="hbar">
         <span>Match Accuracy</span>
-        <meter value="0.94" min="0" max="1" low="0.4" high="0.7" optimum="1"></meter>
+        <meter value="0.94" min="0" max="1" low="0.4" high="0.7" optimum="1"
+               title="Match confidence score: 94%"></meter>
         <strong>94%</strong>
       </div>
+
+      <!-- HTML5 <progress>: task completion indicator — items recovered -->
+      <!-- FLEXBOX ROW: label | progress bar | ratio value -->
       <div class="hbar">
         <span>Recovery Rate</span>
-        <progress value="248" max="300"></progress>
+        <progress value="248" max="300" title="248 of 300 reports resolved"></progress>
         <strong>83%</strong>
       </div>
+
       <a href="#modal-lost" class="btn hcard-cta">Claim This Item &rarr;</a>
     </div>
 
   </div>
 </section>
 
-<!-- ABOUT -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ABOUT SECTION
+     ───────────────────────────────────────────────────────────────
+     CSS Grid: .cards uses grid-template-columns: repeat(3, 1fr)
+               to create three equal-width columns. Each .card
+               sits in one cell. Grid auto-handles row height.
+     ═══════════════════════════════════════════════════════════════ -->
 <section id="about" class="sec">
   <div class="wrap">
     <h2>About FindIt</h2>
     <p class="sub">Lost items on campus go unrecovered because there is no central system. FindIt changes that.</p>
+
+    <!-- CSS GRID: 3-column card layout (repeat(3, 1fr)) -->
     <div class="cards">
       <div class="card">
         <h3>The Problem</h3>
@@ -103,14 +171,28 @@
   </div>
 </section>
 
-<!-- FEATURES -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FEATURES SECTION
+     ───────────────────────────────────────────────────────────────
+     CSS Grid  : .cards reused — same 3-column grid as About.
+                 DRY (Don't Repeat Yourself) — one class, two uses.
+     Flexbox   : .icon uses display:flex + align-items + justify-
+                 content to perfectly centre the SVG inside the
+                 blue square — works at any size.
+     HTML5     : Inline SVG icons — scalable, colourable, no HTTP
+                 requests vs image files.
+     ═══════════════════════════════════════════════════════════════ -->
 <section id="features" class="sec sec-alt">
   <div class="wrap">
     <h2>Features</h2>
     <p class="sub">Everything needed to get a lost item back to its owner.</p>
+
+    <!-- CSS GRID: 3-column features grid (reuses .cards) -->
     <div class="cards">
 
       <div class="feat">
+        <!-- FLEXBOX: centres SVG icon inside the blue rounded square -->
         <div class="icon">
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
             <path d="M4 2h9l4 4v12H4V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -191,17 +273,31 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HOW IT WORKS
+     ───────────────────────────────────────────────────────────────
+     Flexbox: .steps lays out 4 step boxes and 3 arrow separators
+              in a single horizontal row. Each .step has flex:1 so
+              all boxes grow equally. align-items:flex-start keeps
+              arrows at top alignment with box content.
+     Flexbox: .step-arrow centres the SVG arrow vertically and
+              uses flex-shrink:0 to prevent arrows from collapsing.
+              On mobile, steps stack (flex-direction:column) and
+              the arrow rotates 90° with a CSS transform.
+     ═══════════════════════════════════════════════════════════════ -->
 <section id="steps" class="sec">
   <div class="wrap">
     <h2>How It Works</h2>
+
+    <!-- FLEXBOX ROW: step boxes grow equally; arrows flex-shrink:0 -->
     <div class="steps">
       <div class="step">
         <span>01</span>
         <h3>Report</h3>
         <p>File a lost item report with details and location.</p>
       </div>
-      <div class="step-arrow">
+      <div class="step-arrow"><!-- FLEXBOX: centres SVG arrow -->
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
           <line x1="2" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           <polyline points="11,5 17,10 11,15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -238,43 +334,81 @@
   </div>
 </section>
 
-<!-- FAQ — HTML5 details/summary -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FAQ — HTML5 <details> / <summary> accordion
+     ───────────────────────────────────────────────────────────────
+     HTML5 API: <details> is a native disclosure widget. The
+                browser toggles its [open] attribute automatically
+                when the user clicks <summary>. No JavaScript.
+     HTML5 API: <summary> is the always-visible heading/trigger.
+                Clicking it expands/collapses the sibling content.
+     Flexbox  : summary uses display:flex to push the +/− indicator
+                to the far right with margin-left:auto.
+     CSS      : details[open] selector targets open accordions for
+                colour change — no JS state management needed.
+     ═══════════════════════════════════════════════════════════════ -->
 <section id="faq" class="sec sec-alt">
   <div class="wrap">
     <h2>FAQ</h2>
+
+    <!-- HTML5 <details>/<summary>: native accordion, no JavaScript -->
     <div class="faqs">
-      <details>
-        <summary>How do I report a lost item?</summary>
+
+      <details><!-- opens/closes natively via browser on click -->
+        <summary>How do I report a lost item?</summary><!-- FLEXBOX: text + +/- -->
         <p>Click <strong>Report Lost Item</strong>, fill in the form, and submit. You'll receive a tracking ID to follow up.</p>
       </details>
+
       <details>
         <summary>What happens after I submit a report?</summary>
         <p>FindIt scans existing found-item reports and alerts you if a potential match is found, ranked by confidence.</p>
       </details>
+
       <details>
         <summary>How does matching work?</summary>
         <p>The system compares item category, description, location, and date to score potential matches automatically.</p>
       </details>
+
       <details>
         <summary>Who can use FindIt?</summary>
         <p>Any student, faculty member, or staff at the college. Each can report, claim, or hand over found items.</p>
       </details>
+
       <details>
         <summary>How is ownership verified?</summary>
         <p>Claimants answer questions about the item that only the real owner would know, before the handover is approved.</p>
       </details>
+
       <details>
         <summary>What is QR Code Recovery?</summary>
         <p>Register a valuable and print a QR sticker. Any finder can scan it to notify you directly — no account needed.</p>
       </details>
+
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CONTACT SECTION
+     ───────────────────────────────────────────────────────────────
+     CSS Grid  : .contact-row splits into 2 columns: info (1fr)
+                 and form (1.5fr). align-items:start prevents the
+                 shorter column from stretching to match the form.
+     HTML5 API : <input type="email"> — browser validates email
+                 format on submit and shows a native keyboard with
+                 @ on mobile.
+     HTML5 API : <textarea> — multi-line text input (HTML5 semantic
+                 form element with resize:vertical in CSS).
+     HTML5 API : required attribute — triggers built-in browser
+                 validation before the form can be submitted.
+     ═══════════════════════════════════════════════════════════════ -->
 <section id="contact" class="sec">
   <div class="wrap">
     <h2>Contact</h2>
+
+    <!-- CSS GRID: 2-column layout — contact info left, form right -->
     <div class="contact-row">
       <div class="contact-info">
         <p>Questions about FindIt? Reach out to the team.</p>
@@ -283,17 +417,22 @@
         <p><b>Address</b> MCA Department, 8th Floor<br>Christ University, Hosur Road<br>Bangalore — 560029, Karnataka</p>
         <p><b>Project</b> MCA Trimester 1 &middot; Full Stack Development &middot; 2025&ndash;26</p>
       </div>
+
+      <!-- HTML5 <form> with built-in validation via required + type attributes -->
       <form>
         <div class="field">
           <label for="cn">Name</label>
+          <!-- HTML5: required attribute — browser blocks submit if empty -->
           <input type="text" id="cn" placeholder="Your name" required>
         </div>
         <div class="field">
           <label for="ce">Email</label>
+          <!-- HTML5 <input type="email">: validates format, shows @ keyboard on mobile -->
           <input type="email" id="ce" placeholder="your@email.com" required>
         </div>
         <div class="field">
           <label for="cm">Message</label>
+          <!-- HTML5 <textarea>: multi-line text input -->
           <textarea id="cm" rows="4" placeholder="Your message..."></textarea>
         </div>
         <button type="submit" class="btn" style="width:100%">Send Message</button>
@@ -302,22 +441,57 @@
   </div>
 </section>
 
-<!-- MODAL: Report Lost Item — CSS :target, no JavaScript -->
-<div id="modal-lost" class="modal">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL — REPORT LOST ITEM
+     ───────────────────────────────────────────────────────────────
+     CSS :target  : The modal div has display:none normally. When
+                    the URL fragment matches its id (#modal-lost),
+                    CSS :target pseudo-class sets display:flex.
+                    Clicking the backdrop or ✕ link changes the
+                    hash to #! (no matching element) which closes
+                    the modal. Zero JavaScript required.
+     Flexbox      : .modal uses display:flex + align-items to
+                    centre the box vertically on screen.
+     Flexbox      : .modal-hd aligns title and ✕ button in a row.
+     Flexbox      : .modal-form stacks fields in a column with gap.
+     Flexbox      : .mf stacks label above each input field.
+     CSS Grid     : .mrow places Date + Time inputs side-by-side
+                    (grid-template-columns: 1fr 1fr).
+     HTML5 API <datalist>          : provides autocomplete dropdown
+                    suggestions for a text input. The browser merges
+                    the suggestion list with free-text typing.
+     HTML5 API <input type="date"> : native date picker — calendar
+                    UI provided by the browser, no JS library needed.
+     HTML5 API <input type="time"> : native time picker — clock UI
+                    provided by the browser.
+     HTML5 API <input type="tel">  : hints mobile browsers to show
+                    a numeric/telephone keyboard for the field.
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="modal-lost" class="modal"><!-- CSS :target — opens when URL is #modal-lost -->
+  <!-- Clicking the backdrop link sets hash to #! which closes the modal -->
   <a href="#!" class="modal-bg"></a>
+
   <div class="modal-box">
+    <!-- FLEXBOX ROW: modal title + close button -->
     <div class="modal-hd">
       <h3>Report Lost Item</h3>
       <a href="#!" class="modal-x">&#10005;</a>
     </div>
+
+    <!-- FLEXBOX COLUMN: form fields stacked vertically -->
     <form class="modal-form">
+
+      <!-- FLEXBOX COLUMN (.mf): label above input -->
       <div class="mf">
         <label>Item Name *</label>
+        <!-- HTML5 required: browser validates this field before submit -->
         <input type="text" placeholder="e.g. Blue Water Bottle" required>
       </div>
+
       <div class="mf">
         <label>Category</label>
-        <!-- HTML5 datalist -->
+        <!-- HTML5 <datalist>: autocomplete suggestion list linked via list="cats" -->
         <input type="text" list="cats" placeholder="Type or select a category">
         <datalist id="cats">
           <option value="Electronics">
@@ -330,54 +504,102 @@
           <option value="Other">
         </datalist>
       </div>
+
+      <!-- CSS GRID (.mrow): Date + Time fields side-by-side (1fr 1fr) -->
       <div class="mrow">
-        <!-- HTML5 date and time inputs -->
-        <div class="mf"><label>Date Lost</label><input type="date"></div>
-        <div class="mf"><label>Time</label><input type="time"></div>
+        <div class="mf">
+          <label>Date Lost</label>
+          <!-- HTML5 <input type="date">: renders a native calendar date picker -->
+          <input type="date">
+        </div>
+        <div class="mf">
+          <label>Time</label>
+          <!-- HTML5 <input type="time">: renders a native clock/time picker -->
+          <input type="time">
+        </div>
       </div>
+
       <div class="mf">
         <label>Last Seen Location *</label>
         <input type="text" placeholder="e.g. MCA Block, 8th Floor" required>
       </div>
+
       <div class="mf">
         <label>Description *</label>
+        <!-- HTML5 <textarea>: multi-line free text input -->
         <textarea rows="3" placeholder="Color, brand, any unique marks..." required></textarea>
       </div>
-      <!-- HTML5 tel input -->
-      <div class="mf"><label>Contact Number</label><input type="tel" placeholder="+91 98765 43210"></div>
+
+      <div class="mf">
+        <label>Contact Number</label>
+        <!-- HTML5 <input type="tel">: shows numeric keyboard on mobile -->
+        <input type="tel" placeholder="+91 98765 43210">
+      </div>
+
       <button type="submit" class="btn" style="width:100%">Submit Report</button>
     </form>
   </div>
 </div>
 
-<!-- MODAL: Report Found Item -->
-<div id="modal-found" class="modal">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL — REPORT FOUND ITEM
+     ───────────────────────────────────────────────────────────────
+     Same CSS :target technique as #modal-lost. Opens when URL
+     fragment is #modal-found. Same Flexbox + Grid layout inside.
+     HTML5 API <select>: native dropdown for item condition.
+                         Styled with custom SVG arrow via CSS
+                         background-image (appearance:none resets
+                         the platform default arrow first).
+     HTML5 API <input type="date"> and <input type="time"> reused.
+     HTML5 <datalist id="cats"> reused — same list, different modal.
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="modal-found" class="modal"><!-- CSS :target — opens when URL is #modal-found -->
   <a href="#!" class="modal-bg"></a>
+
   <div class="modal-box">
+    <!-- FLEXBOX ROW: title + close -->
     <div class="modal-hd">
       <h3>Report Found Item</h3>
       <a href="#!" class="modal-x">&#10005;</a>
     </div>
+
+    <!-- FLEXBOX COLUMN: stacked form fields -->
     <form class="modal-form">
+
       <div class="mf">
         <label>Item Description *</label>
         <input type="text" placeholder="e.g. Black Leather Wallet" required>
       </div>
+
       <div class="mf">
         <label>Category</label>
+        <!-- Reuses the same HTML5 <datalist id="cats"> from the lost modal -->
         <input type="text" list="cats" placeholder="Type or select a category">
       </div>
+
+      <!-- CSS GRID (.mrow): date + time side-by-side -->
       <div class="mrow">
-        <div class="mf"><label>Date Found</label><input type="date"></div>
-        <div class="mf"><label>Time</label><input type="time"></div>
+        <div class="mf">
+          <label>Date Found</label>
+          <!-- HTML5 <input type="date">: native calendar picker -->
+          <input type="date">
+        </div>
+        <div class="mf">
+          <label>Time</label>
+          <!-- HTML5 <input type="time">: native time picker -->
+          <input type="time">
+        </div>
       </div>
+
       <div class="mf">
         <label>Where Found *</label>
         <input type="text" placeholder="e.g. Cafeteria, Ground Floor" required>
       </div>
-      <!-- HTML5 select -->
+
       <div class="mf">
         <label>Condition</label>
+        <!-- HTML5 <select>: native dropdown; CSS resets arrow via appearance:none -->
         <select>
           <option value="" disabled selected>Select condition</option>
           <option>Good — No visible damage</option>
@@ -385,23 +607,45 @@
           <option>Damaged — Needs attention</option>
         </select>
       </div>
+
       <div class="mf">
         <label>Notes</label>
         <textarea rows="2" placeholder="Any other details..."></textarea>
       </div>
-      <div class="mf"><label>Your Contact</label><input type="tel" placeholder="+91 98765 43210"></div>
+
+      <div class="mf">
+        <label>Your Contact</label>
+        <!-- HTML5 <input type="tel">: numeric keyboard on mobile -->
+        <input type="tel" placeholder="+91 98765 43210">
+      </div>
+
       <button type="submit" class="btn" style="width:100%">Submit Report</button>
     </form>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer class="footer">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FOOTER
+     ───────────────────────────────────────────────────────────────
+     HTML5   : <footer> is a semantic landmark element that marks
+               the footer of the nearest sectioning content.
+     Flexbox : .footer-row uses display:flex with justify-content:
+               space-between to place the brand block on the left
+               and nav links on the right.
+     Flexbox : .footer-row ul uses flex-direction:column + gap to
+               stack the navigation links vertically.
+     ═══════════════════════════════════════════════════════════════ -->
+<footer class="footer"><!-- HTML5 <footer>: semantic page footer -->
+
+  <!-- FLEXBOX ROW: brand info left, nav links right -->
   <div class="wrap footer-row">
     <div>
       <p class="footer-logo">FindIt</p>
       <p>Smart Digital Lost &amp; Found &middot; Christ University Bangalore<br>MCA Trimester 1 &middot; Full Stack Development &middot; 2025&ndash;26</p>
     </div>
+
+    <!-- FLEXBOX COLUMN: vertical nav link list -->
     <ul>
       <li><a href="#home">Home</a></li>
       <li><a href="#about">About</a></li>
@@ -411,6 +655,7 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
+
   <p class="footer-copy">&copy; 2025 FindIt &mdash; MCA Full Stack Development Project, Christ University</p>
 </footer>
 
