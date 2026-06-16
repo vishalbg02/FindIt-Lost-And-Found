@@ -9,7 +9,9 @@
 </head>
 <body>
 
-    <!-- NAVIGATION -->
+    <!-- =============================================
+         NAVIGATION BAR — sticky, CSS-only hamburger
+         ============================================= -->
     <nav class="nav">
         <div class="container nav__inner">
             <a href="#home" class="nav__logo">
@@ -20,7 +22,7 @@
                 FindIt
             </a>
 
-            <!-- CSS-only hamburger toggle — no JavaScript needed -->
+            <!-- Hidden checkbox powers the hamburger (no JS) -->
             <input type="checkbox" id="nav-toggle" class="nav__check">
             <label for="nav-toggle" class="nav__burger" aria-label="Toggle navigation menu">
                 <span></span>
@@ -32,6 +34,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#faq">FAQ</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
@@ -39,7 +42,9 @@
 
     <main>
 
-        <!-- HERO -->
+        <!-- =============================================
+             HERO — Flexbox layout
+             ============================================= -->
         <section id="home" class="hero">
             <div class="container hero__inner">
 
@@ -54,13 +59,14 @@
                         college campuses. Report, track, and recover lost items with
                         speed and transparency — no more notice boards, no more guessing.
                     </p>
+                    <!-- Buttons open CSS :target modals — no JavaScript -->
                     <div class="hero__cta">
-                        <a href="#contact" class="btn btn--solid">Report Lost Item</a>
-                        <a href="#contact" class="btn btn--outline">Report Found Item</a>
+                        <a href="#modal-lost" class="btn btn--solid">Report Lost Item</a>
+                        <a href="#modal-found" class="btn btn--outline">Report Found Item</a>
                     </div>
                 </div>
 
-                <!-- UI preview cards -->
+                <!-- UI preview cards — Flexbox column -->
                 <div class="hero__visual">
                     <div class="ui-card">
                         <div class="ui-card__tag ui-card__tag--match">
@@ -71,7 +77,7 @@
                         <div class="ui-card__rows">
                             <div class="ui-card__row">
                                 <span class="ui-card__key">Found at</span>
-                                <span class="ui-card__val">Central Library, Floor 2</span>
+                                <span class="ui-card__val">MCA Block, 8th Floor</span>
                             </div>
                             <div class="ui-card__row">
                                 <span class="ui-card__key">Date &amp; Time</span>
@@ -79,9 +85,13 @@
                             </div>
                             <div class="ui-card__row">
                                 <span class="ui-card__key">Confidence</span>
-                                <span class="ui-card__val ui-card__val--hi">94% Match</span>
+                                <span class="ui-card__val ui-card__val--hi">94%</span>
                             </div>
                         </div>
+                        <!-- HTML5 <meter> — match confidence bar -->
+                        <meter class="conf-meter" value="0.94" min="0" max="1"
+                               low="0.4" high="0.75" optimum="1"
+                               title="Match confidence: 94%"></meter>
                         <div class="ui-card__actions">
                             <span class="ui-card__btn ui-card__btn--primary">Claim Item</span>
                             <span class="ui-card__btn ui-card__btn--ghost">Skip</span>
@@ -94,14 +104,19 @@
                             Item Recovered
                         </div>
                         <p class="ui-card__name ui-card__name--sm">Student ID Card &mdash; Riya Shah</p>
-                        <p class="ui-card__sub">Returned successfully &middot; 2 hours ago</p>
+                        <!-- HTML5 <progress> — 4 of 4 recovery steps done -->
+                        <progress class="rec-progress" value="4" max="4"
+                                  title="4 of 4 recovery steps complete"></progress>
+                        <p class="ui-card__sub">All steps complete &middot; 2 hours ago</p>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- ABOUT / PROBLEM -->
+        <!-- =============================================
+             ABOUT — CSS Grid layout (2-column editorial)
+             ============================================= -->
         <section id="about" class="about">
             <div class="container about__inner">
 
@@ -148,7 +163,9 @@
             </div>
         </section>
 
-        <!-- FEATURES -->
+        <!-- =============================================
+             FEATURES — CSS Grid layout (3-column)
+             ============================================= -->
         <section id="features" class="features">
             <div class="container">
                 <div class="features__head">
@@ -162,11 +179,11 @@
                     </p>
                 </div>
 
+                <!-- CSS Grid: 3-column feature cards -->
                 <div class="features__grid">
 
                     <div class="feat">
                         <div class="feat__icon" aria-hidden="true">
-                            <!-- Document / report icon -->
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M4 2h9l4 4v12H4V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                                 <path d="M13 2v4h4" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -175,16 +192,11 @@
                             </svg>
                         </div>
                         <h3>Lost Item Reporting</h3>
-                        <p>
-                            Submit a structured report with item name, category, description,
-                            last known location, date, and photos. Each report receives a
-                            unique tracking ID for follow-up.
-                        </p>
+                        <p>Submit a structured report with item name, category, description, last known location, date, and photos. Each report receives a unique tracking ID for follow-up.</p>
                     </div>
 
                     <div class="feat">
                         <div class="feat__icon" aria-hidden="true">
-                            <!-- Box / found item icon -->
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M2 7h16v10a1 1 0 01-1 1H3a1 1 0 01-1-1V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                                 <path d="M1 5a1 1 0 011-1h16a1 1 0 011 1v2H1V5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -193,16 +205,11 @@
                             </svg>
                         </div>
                         <h3>Found Item Reporting</h3>
-                        <p>
-                            Report an item you found on campus in seconds. It is stored
-                            securely and immediately scanned against all active lost reports
-                            to find a possible owner.
-                        </p>
+                        <p>Report an item you found on campus in seconds. It is stored securely and immediately scanned against all active lost reports to find a possible owner.</p>
                     </div>
 
                     <div class="feat">
                         <div class="feat__icon" aria-hidden="true">
-                            <!-- Link / match icon -->
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <circle cx="5" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/>
                                 <circle cx="15" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/>
@@ -210,48 +217,33 @@
                             </svg>
                         </div>
                         <h3>Smart Matching</h3>
-                        <p>
-                            The system compares item type, location, time, and description
-                            attributes to surface the most likely matches and ranks them
-                            by confidence score.
-                        </p>
+                        <p>The system compares item type, location, time, and description attributes to surface the most likely matches and ranks them by confidence score.</p>
                     </div>
 
                     <div class="feat">
                         <div class="feat__icon" aria-hidden="true">
-                            <!-- Shield / verify icon -->
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M10 2L3 5v5c0 4 3 7 7 8 4-1 7-4 7-8V5l-7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                                 <polyline points="7,10 9,12 13,8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
                         <h3>Claim Verification</h3>
-                        <p>
-                            Claimants must answer security questions and provide ownership
-                            details the system validates. Items are only released to verified
-                            owners. All exchanges are logged.
-                        </p>
+                        <p>Claimants must answer security questions and provide ownership details the system validates. Items are only released to verified owners. All exchanges are logged.</p>
                     </div>
 
                     <div class="feat">
                         <div class="feat__icon" aria-hidden="true">
-                            <!-- Bell / notification icon -->
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M10 2C6.7 2 4 4.7 4 8v3l-2 3h16l-2-3V8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                                 <path d="M8.5 17a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                             </svg>
                         </div>
                         <h3>Real-time Notifications</h3>
-                        <p>
-                            Get notified the moment a potential match surfaces for your
-                            report, when someone files a related submission, or when your
-                            claim status is updated.
-                        </p>
+                        <p>Get notified the moment a potential match surfaces for your report, when someone files a related submission, or when your claim status is updated.</p>
                     </div>
 
                     <div class="feat">
                         <div class="feat__icon" aria-hidden="true">
-                            <!-- QR code icon -->
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
                                 <rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
@@ -266,18 +258,16 @@
                             </svg>
                         </div>
                         <h3>QR Code Recovery</h3>
-                        <p>
-                            Register valuables with a unique QR code sticker. A finder
-                            can scan it to instantly trigger a notification to the owner
-                            through FindIt — no app required.
-                        </p>
+                        <p>Register valuables with a unique QR code sticker. A finder can scan it to instantly trigger a notification to the owner through FindIt — no app required.</p>
                     </div>
 
                 </div>
             </div>
         </section>
 
-        <!-- HOW IT WORKS -->
+        <!-- =============================================
+             HOW IT WORKS — Flexbox row layout
+             ============================================= -->
         <section id="how-it-works" class="hiw">
             <div class="container">
                 <div class="hiw__head">
@@ -285,6 +275,7 @@
                     <h2>From report to recovery in four steps</h2>
                 </div>
 
+                <!-- Flexbox row with arrow separators -->
                 <div class="hiw__steps">
 
                     <div class="hiw__step">
@@ -336,7 +327,9 @@
             </div>
         </section>
 
-        <!-- WHO IT'S FOR -->
+        <!-- =============================================
+             WHO IT'S FOR — CSS Grid layout (dark section)
+             ============================================= -->
         <section class="for">
             <div class="container">
                 <div class="for__head">
@@ -344,22 +337,18 @@
                     <h2>Designed for the entire campus community</h2>
                 </div>
 
+                <!-- CSS Grid: 3-column persona cards -->
                 <div class="for__grid">
 
                     <div class="for__card">
                         <div class="for__icon" aria-hidden="true">
-                            <!-- Person / student icon -->
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
                                 <circle cx="11" cy="7.5" r="4" stroke="currentColor" stroke-width="1.5"/>
                                 <path d="M3 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                             </svg>
                         </div>
                         <h3>Students</h3>
-                        <p>
-                            Quickly report a lost ID card, laptop, or water bottle.
-                            Get notified the moment a match surfaces — without
-                            asking everyone around campus.
-                        </p>
+                        <p>Quickly report a lost ID card, laptop, or water bottle. Get notified the moment a match surfaces — without asking everyone around campus.</p>
                         <ul class="for__list">
                             <li>Report in under 2 minutes</li>
                             <li>Track claim status live</li>
@@ -370,7 +359,6 @@
 
                     <div class="for__card">
                         <div class="for__icon" aria-hidden="true">
-                            <!-- Lock / staff badge icon -->
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
                                 <rect x="3" y="8" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
                                 <path d="M7.5 8V6.5C7.5 4.3 9.1 2.5 11 2.5s3.5 1.8 3.5 4V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -378,11 +366,7 @@
                             </svg>
                         </div>
                         <h3>Faculty &amp; Staff</h3>
-                        <p>
-                            Manage found items collected in your department. Log them
-                            into FindIt and let the system connect them with their
-                            owners automatically — with a full handover record.
-                        </p>
+                        <p>Manage found items collected in your department. Log them into FindIt and let the system connect them with owners — with a full handover record.</p>
                         <ul class="for__list">
                             <li>Submit found items easily</li>
                             <li>Handover with audit trail</li>
@@ -393,7 +377,6 @@
 
                     <div class="for__card">
                         <div class="for__icon" aria-hidden="true">
-                            <!-- Clipboard / admin icon -->
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
                                 <rect x="3" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/>
                                 <path d="M8 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -402,11 +385,7 @@
                             </svg>
                         </div>
                         <h3>Administration</h3>
-                        <p>
-                            Get visibility into all open reports across campus. Monitor
-                            resolution rates, identify high-loss zones, and streamline
-                            the physical handover process end-to-end.
-                        </p>
+                        <p>Get visibility into all open reports across campus. Monitor resolution rates, identify high-loss zones, and streamline the physical handover process.</p>
                         <ul class="for__list">
                             <li>Campus-wide report overview</li>
                             <li>Recovery trend insights</li>
@@ -419,7 +398,68 @@
             </div>
         </section>
 
-        <!-- CONTACT -->
+        <!-- =============================================
+             FAQ — HTML5 <details> / <summary> elements
+             ============================================= -->
+        <section id="faq" class="faq">
+            <div class="container">
+                <div class="faq__head">
+                    <p class="overline">FAQ</p>
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+
+                <!-- HTML5 <details> — interactive accordion, no JavaScript -->
+                <div class="faq__list">
+
+                    <details class="faq__item">
+                        <summary class="faq__q">How do I report a lost item?</summary>
+                        <p class="faq__a">
+                            Click <strong>Report Lost Item</strong> on the homepage to open the report form. Fill in the item name, category, date, location, and any identifying details. Your report gets a unique tracking ID you can use to check its status at any time.
+                        </p>
+                    </details>
+
+                    <details class="faq__item">
+                        <summary class="faq__q">What happens after I submit a report?</summary>
+                        <p class="faq__a">
+                            FindIt immediately scans all existing found-item reports and compares attributes like item type, location, and date. If a potential match is found, you will receive a notification so you can verify and claim the item.
+                        </p>
+                    </details>
+
+                    <details class="faq__item">
+                        <summary class="faq__q">How does the smart matching system work?</summary>
+                        <p class="faq__a">
+                            The matching engine compares multiple attributes — item category, description keywords, last known location, and time window — and scores each potential match. Reports are ranked by confidence score and the top matches are surfaced first.
+                        </p>
+                    </details>
+
+                    <details class="faq__item">
+                        <summary class="faq__q">Is FindIt only for students?</summary>
+                        <p class="faq__a">
+                            No. FindIt is designed for the entire campus community — students, faculty, staff, and administration. Each group has a specific role: students report and claim, faculty manage found items in their department, and admin monitors campus-wide activity.
+                        </p>
+                    </details>
+
+                    <details class="faq__item">
+                        <summary class="faq__q">How is ownership verified before returning an item?</summary>
+                        <p class="faq__a">
+                            Claimants must answer a set of ownership questions and provide specific details about the item — brand, color, model, contents — that only the real owner would know. The system validates these against the original report before authorizing the handover.
+                        </p>
+                    </details>
+
+                    <details class="faq__item">
+                        <summary class="faq__q">What is the QR Code Recovery feature?</summary>
+                        <p class="faq__a">
+                            You can register your valuables on FindIt and print a unique QR sticker to attach to them. If a finder scans the QR code with any smartphone camera, they are directed to a page where they can log the item as found — automatically notifying you, without the finder needing a FindIt account.
+                        </p>
+                    </details>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =============================================
+             CONTACT
+             ============================================= -->
         <section id="contact" class="contact">
             <div class="container">
                 <div class="contact__head">
@@ -456,22 +496,23 @@
                         </div>
                     </div>
 
+                    <!-- HTML5 form with new input types -->
                     <form class="contact__form">
                         <div class="field">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" placeholder="Your full name">
+                            <label for="c-name">Full Name</label>
+                            <input type="text" id="c-name" name="c-name" placeholder="Your full name" required>
                         </div>
                         <div class="field">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="your@email.com">
+                            <label for="c-email">Email</label>
+                            <input type="email" id="c-email" name="c-email" placeholder="your@email.com" required>
                         </div>
                         <div class="field">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" placeholder="What is this about?">
+                            <label for="c-subject">Subject</label>
+                            <input type="text" id="c-subject" name="c-subject" placeholder="What is this about?">
                         </div>
                         <div class="field">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" placeholder="Write your message..."></textarea>
+                            <label for="c-message">Message</label>
+                            <textarea id="c-message" name="c-message" rows="5" placeholder="Write your message..."></textarea>
                         </div>
                         <button type="submit" class="btn btn--solid btn--full">Send Message</button>
                     </form>
@@ -480,9 +521,189 @@
             </div>
         </section>
 
+        <!-- =============================================
+             MODAL: Report Lost Item
+             Technique: CSS :target pseudo-class (no JS)
+             HTML5: datalist, date, time, tel inputs
+             ============================================= -->
+        <div id="modal-lost" class="modal" role="dialog" aria-modal="true" aria-labelledby="ml-title">
+            <!-- Clicking the backdrop closes the modal -->
+            <a href="#!" class="modal__backdrop" aria-label="Close"></a>
+            <div class="modal__box">
+                <div class="modal__head">
+                    <h3 id="ml-title">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-right:6px;vertical-align:-2px">
+                            <path d="M4 2h9l4 4v12H4V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M13 2v4h4" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                        Report Lost Item
+                    </h3>
+                    <a href="#!" class="modal__close" aria-label="Close modal">&#10005;</a>
+                </div>
+
+                <form class="modal__form" novalidate>
+
+                    <div class="mfield">
+                        <label for="l-name">Item Name <span class="req">*</span></label>
+                        <input type="text" id="l-name" name="l-name"
+                               placeholder="e.g. Blue Titan Water Bottle" required>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="l-cat">Category</label>
+                        <!-- HTML5 <datalist> — provides autocomplete suggestions -->
+                        <input type="text" id="l-cat" name="l-cat"
+                               list="item-cats-lost"
+                               placeholder="Select or type a category">
+                        <datalist id="item-cats-lost">
+                            <option value="Electronics">
+                            <option value="Stationery">
+                            <option value="ID Card / Documents">
+                            <option value="Clothing &amp; Accessories">
+                            <option value="Bags">
+                            <option value="Books &amp; Notes">
+                            <option value="Keys">
+                            <option value="Water Bottle">
+                            <option value="Spectacles">
+                            <option value="Other">
+                        </datalist>
+                    </div>
+
+                    <!-- HTML5 date and time inputs -->
+                    <div class="mrow">
+                        <div class="mfield">
+                            <label for="l-date">Date Lost</label>
+                            <input type="date" id="l-date" name="l-date">
+                        </div>
+                        <div class="mfield">
+                            <label for="l-time">Approx. Time</label>
+                            <input type="time" id="l-time" name="l-time">
+                        </div>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="l-loc">Last Seen Location <span class="req">*</span></label>
+                        <input type="text" id="l-loc" name="l-loc"
+                               placeholder="e.g. MCA Block, 8th Floor, Room 802" required>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="l-desc">Description <span class="req">*</span></label>
+                        <textarea id="l-desc" name="l-desc" rows="3"
+                                  placeholder="Color, brand, size, any unique marks or stickers..." required></textarea>
+                    </div>
+
+                    <!-- HTML5 tel input with pattern validation -->
+                    <div class="mfield">
+                        <label for="l-phone">Contact Number</label>
+                        <input type="tel" id="l-phone" name="l-phone"
+                               placeholder="+91 98765 43210"
+                               pattern="[+]?[0-9\s\-]{10,15}">
+                    </div>
+
+                    <button type="submit" class="btn btn--solid btn--full">Submit Lost Report</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- =============================================
+             MODAL: Report Found Item
+             Technique: CSS :target pseudo-class (no JS)
+             HTML5: datalist, date, time, tel, select
+             ============================================= -->
+        <div id="modal-found" class="modal" role="dialog" aria-modal="true" aria-labelledby="mf-title">
+            <a href="#!" class="modal__backdrop" aria-label="Close"></a>
+            <div class="modal__box">
+                <div class="modal__head">
+                    <h3 id="mf-title">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-right:6px;vertical-align:-2px">
+                            <path d="M2 7h16v10a1 1 0 01-1 1H3a1 1 0 01-1-1V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M1 5a1 1 0 011-1h16a1 1 0 011 1v2H1V5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                        Report Found Item
+                    </h3>
+                    <a href="#!" class="modal__close" aria-label="Close modal">&#10005;</a>
+                </div>
+
+                <form class="modal__form" novalidate>
+
+                    <div class="mfield">
+                        <label for="f-name">Item Name / Description <span class="req">*</span></label>
+                        <input type="text" id="f-name" name="f-name"
+                               placeholder="e.g. Black Leather Wallet" required>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="f-cat">Category</label>
+                        <!-- Same datalist concept, separate element -->
+                        <input type="text" id="f-cat" name="f-cat"
+                               list="item-cats-found"
+                               placeholder="Select or type a category">
+                        <datalist id="item-cats-found">
+                            <option value="Electronics">
+                            <option value="Stationery">
+                            <option value="ID Card / Documents">
+                            <option value="Clothing &amp; Accessories">
+                            <option value="Bags">
+                            <option value="Books &amp; Notes">
+                            <option value="Keys">
+                            <option value="Water Bottle">
+                            <option value="Spectacles">
+                            <option value="Other">
+                        </datalist>
+                    </div>
+
+                    <div class="mrow">
+                        <div class="mfield">
+                            <label for="f-date">Date Found</label>
+                            <input type="date" id="f-date" name="f-date">
+                        </div>
+                        <div class="mfield">
+                            <label for="f-time">Time Found</label>
+                            <input type="time" id="f-time" name="f-time">
+                        </div>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="f-loc">Where You Found It <span class="req">*</span></label>
+                        <input type="text" id="f-loc" name="f-loc"
+                               placeholder="e.g. Cafeteria, Ground Floor" required>
+                    </div>
+
+                    <!-- HTML5 <select> for item condition -->
+                    <div class="mfield">
+                        <label for="f-cond">Item Condition</label>
+                        <select id="f-cond" name="f-cond">
+                            <option value="" disabled selected>Select condition</option>
+                            <option value="good">Good — No visible damage</option>
+                            <option value="fair">Fair — Minor wear or marks</option>
+                            <option value="damaged">Damaged — Needs attention</option>
+                        </select>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="f-notes">Additional Notes</label>
+                        <textarea id="f-notes" name="f-notes" rows="3"
+                                  placeholder="Any other details, or where the item is currently being kept..."></textarea>
+                    </div>
+
+                    <div class="mfield">
+                        <label for="f-phone">Your Contact Number</label>
+                        <input type="tel" id="f-phone" name="f-phone"
+                               placeholder="+91 98765 43210"
+                               pattern="[+]?[0-9\s\-]{10,15}">
+                    </div>
+
+                    <button type="submit" class="btn btn--solid btn--full">Submit Found Report</button>
+                </form>
+            </div>
+        </div>
+
     </main>
 
-    <!-- FOOTER -->
+    <!-- =============================================
+         FOOTER
+         ============================================= -->
     <footer class="footer">
         <div class="container">
             <div class="footer__inner">
@@ -505,6 +726,7 @@
                         <li><a href="#about">About</a></li>
                         <li><a href="#features">Features</a></li>
                         <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#faq">FAQ</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
@@ -514,6 +736,7 @@
                     <p>
                         MCA Trimester 1<br>
                         Full Stack Development<br>
+                        Christ University, Bangalore<br>
                         Academic Year 2025&ndash;26
                     </p>
                 </div>
@@ -521,7 +744,7 @@
             </div>
 
             <div class="footer__bottom">
-                <p>&copy; 2025 FindIt &mdash; MCA Full Stack Development Project</p>
+                <p>&copy; 2025 FindIt &mdash; MCA Full Stack Development Project, Christ University Bangalore</p>
             </div>
         </div>
     </footer>
