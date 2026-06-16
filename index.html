@@ -34,27 +34,50 @@
 
 <!-- HERO -->
 <section id="home" class="hero">
-  <div class="wrap">
-    <p class="tag">MCA Trimester 1 &middot; Full Stack Development &middot; Christ University Bangalore</p>
-    <h1>Smart Digital Lost &amp; Found<br>for College Campuses</h1>
-    <p class="lead">Report, match, and recover lost items — no notice boards, no guessing.</p>
-    <div class="hero-btns">
-      <a href="#modal-lost" class="btn">Report Lost Item</a>
-      <a href="#modal-found" class="btn-o">Report Found Item</a>
+  <div class="wrap hero-inner">
+
+    <div class="hero-text">
+      <p class="tag">MCA Trimester 1 &middot; Full Stack Development &middot; Christ University</p>
+      <h1>Find What's<br><span class="hl">Lost on Campus</span></h1>
+      <p class="lead">One platform to report, match, and return lost items — no notice boards, no group chats, no dead ends.</p>
+      <div class="hero-btns">
+        <a href="#modal-lost" class="btn">Report Lost Item</a>
+        <a href="#modal-found" class="btn-o">Report Found Item</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><strong>94%</strong><span>Match accuracy</span></div>
+        <div class="hstat"><strong>248</strong><span>Items recovered</span></div>
+        <div class="hstat"><strong>2 min</strong><span>Avg. report time</span></div>
+      </div>
     </div>
-    <!-- HTML5 meter and progress — platform at a glance -->
-    <div class="metrics">
-      <div class="metric">
+
+    <!-- Product preview card — HTML5 meter + progress inside -->
+    <div class="hero-card">
+      <div class="hcard-hd">
+        <span class="hdot"></span>
+        <span>Match Found</span>
+        <span class="hbadge">94% confidence</span>
+      </div>
+      <div class="hcard-item">
+        <div class="hcard-ico">&#128241;</div>
+        <div>
+          <p><strong>Blue iPhone 14 Case</strong></p>
+          <small>Found near MCA Block &middot; 2 hrs ago</small>
+        </div>
+      </div>
+      <div class="hbar">
         <span>Match Accuracy</span>
-        <meter value="0.94" min="0" max="1" low="0.4" high="0.7" optimum="1" title="94% match accuracy"></meter>
+        <meter value="0.94" min="0" max="1" low="0.4" high="0.7" optimum="1"></meter>
         <strong>94%</strong>
       </div>
-      <div class="metric">
-        <span>Items Recovered</span>
-        <progress value="248" max="300" title="248 of 300 reports resolved"></progress>
-        <strong>248 / 300</strong>
+      <div class="hbar">
+        <span>Recovery Rate</span>
+        <progress value="248" max="300"></progress>
+        <strong>83%</strong>
       </div>
+      <a href="#modal-lost" class="btn hcard-cta">Claim This Item &rarr;</a>
     </div>
+
   </div>
 </section>
 
